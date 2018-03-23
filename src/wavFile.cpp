@@ -5,6 +5,11 @@
 	#define __WavFile
 	#endif
 
+	WavFile::WavFile(char *fileName)
+	{
+	    isFileExist(fileName);
+	}
+
 	int WavFile::isFileExist(char *fileName)
 	{
 		FILE *wavFileName;
@@ -18,56 +23,52 @@
 		return 0;
 	}
 
-	WavFile::WavFile(char *fileName)
-	{
-	    isFileExist(fileName);
-	}
-
-	int WavFile::checkFilesForHiding(char *parentFile, char *childFile)
+	int WavFile::checkFiles(char *parentFile, char *childFile)
 	{
 		if(isFileExist(parentFile) == -1)
 		{
-			throw("WAV non trouvé");
+			throw("WAV non trouve");
 			return -1;
 		}
 
 		if(isFileExist(childFile)== -1)
 		{
-			throw("txt non trouvé");
+			throw("txt non trouve");
 			return -1;
 		}
+
 		return 0;
 	}
 
-	int WavFile::hide (char *parentFile, char *childFile, char *output)
+	int WavFile::encode (char *parent, char *child, char *output)
 	{
-		FILE *wfile, *tfile, *ofile;
+		FILE *wFile, *tFile, *oFile;
+		char wavBuffer, txtBuffer;
 		unsigned char header[54];
-		char wavbuffer, txtbuffer;
 		int i;
 
-		if(checkFilesForHiding(parentFile, childFile) == -1)
+		if(checkFiles(parent, child) == -1)
 		{
-			throw ("error!, initialization failed...");
+			throw ("error!, verification fichiers...");
 			return -1;
 		}
 
-		wfile = fopen(parentFile, "rb");
-		tfile = fopen(childFile, "rb");
-		ofile = fopen(output, "w+b");
+		wFile = fopen(parent, "rb");
+		tFile = fopen(child, "rb");
+		oFile = fopen(output, "w+b");
 
-		fread(header, 54, 1, wfile);
-		fwrite(header, 54, 1, ofile);
+		fread(header, 54, 1, wFile);
+		fwrite(header, 54, 1, oFile);
 
-		while( ! feof(tfile) )
+		while( ! feof(tFile) )
 		{
-			txtbuffer = fgetc(tfile);
+			txtBuffer = fgetc(tFile);
 			for(i = 0; i<8; i++)
 			{
-				wavbuffer = fgetc(wfile);
-				wavbuffer &= 0xFE;
-				wavbuffer |= (char)((txtbuffer >> i) & 1);
-				fputc(wavbuffer,ofile);
+				wavBuffer = fgetc(wFile);
+				wavBuffer = wavBuffer & 0xFE;
+				wavBuffer = wavBuffer | ((char)((txtBuffer >> i) & 1));
+				fputc(wavBuffer,oFile);
 
 				wavFileSize--;
 			}
@@ -75,51 +76,52 @@
 
 		if(wavFileSize != 0)
 		{
-			while(!feof(wfile)) {
-				fputc(fgetc(wfile), ofile);
+			while(!feof(wFile)) {
+				fputc(fgetc(wFile), oFile);
             }
 		}
 
-		fclose(wfile);
-		fclose(tfile);
-		fclose(ofile);
+		fclose(wFile);
+		fclose(tFile);
+		fclose(oFile);
 
 		return 0;
 	}
 
-	int WavFile::unhide(char *parentFile, char *txtfile)
+	int WavFile::decode(char *parent, char *txt)
 	{
 
-		FILE *bfile, *tfile;
-		char ch, bmpBuffer[8];
+		FILE *bFile, *tFile;
+		char c, buffer[8];
 		int i;
-		bfile = fopen(parentFile,"rb");
-		tfile = fopen(txtfile,"w+b");
+		bFile = fopen(parent,"rb");
+		tFile = fopen(txt,"w+b");
 
-		fseek(bfile, 54, SEEK_SET);
-		ch = 0;
+		// On skip le header
+		fseek(bFile, 54, SEEK_SET);
+		c = 0;
 
-		while(!feof(bfile))
+		while(!feof(bFile))
 		{
-			ch = 0;
+			c = 0;
 			for (i=0; i<=7; i++) {
-				bmpBuffer[i] = fgetc(bfile);
+				buffer[i] = fgetc(bFile);
 			}
 
 			for (i=7; i>=0; i--) {
-				ch += (bmpBuffer[i] & 1);
+				c += (buffer[i] & 1);
 				if(i != 0)
-					ch <<= 1;
+					c <<= 1;
 			}
 
-			if(ch == EOF || ch == '*') {
+			if(c == EOF) {
 				break;
 			} else {
-				fputc(ch,tfile);
+				fputc(c,tFile);
 			}
 		}
 
-		fclose(bfile);
-		fclose(tfile);
+		fclose(bFile);
+		fclose(tFile);
 		return 0;
 	}

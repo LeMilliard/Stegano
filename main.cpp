@@ -50,7 +50,7 @@
 	int wavEncoderHandler(char *parent, char *child, char *output)
 	{
 		WavFile wa(parent);
-		if(wa.hide(parent, child, output) == -1)
+		if(wa.encode(parent, child, output) == -1)
 			return -1;
 
 		cout<<"encodage terminé"<<endl;
@@ -60,7 +60,7 @@
 	int wavDecoderHandler(char *parent, char *output)
 	{
 		WavFile wa(parent);
-		if(wa.unhide(parent,output)==-1)
+		if(wa.decode(parent,output)==-1)
 			return -1;
 		cout<<"decodage terminé"<<endl;
 		return 0;
