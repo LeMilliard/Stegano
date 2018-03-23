@@ -1,0 +1,17 @@
+# depslib dependency file v1.0
+1521799661 source:c:\users\kbouzan\documents\codeblocks\stegano\main.cpp
+	"header.h"
+	"wavFile.h"
+
+1521798857 c:\users\kbouzan\documents\codeblocks\stegano\header.h
+	<iostream>
+	"stdio.h"
+	"cstdlib"
+	"windows.h"
+
+1521797078 c:\users\kbouzan\documents\codeblocks\stegano\include\wavfile.h
+
+1521799163 source:c:\users\kbouzan\documents\codeblocks\stegano\src\wavfile.cpp
+	"../header.h"
+	"wavFile.h"
+
