@@ -43,7 +43,7 @@
 	int WavFile::encode (char *parent, char *child, char *output)
 	{
 		FILE *wFile, *tFile, *oFile;
-		char wavBuffer, txtBuffer;
+		char wavBuffer, txtBuffer, lastBitChar;
 		unsigned char header[54];
 		int i;
 
@@ -63,11 +63,22 @@
 		while( ! feof(tFile) )
 		{
 			txtBuffer = fgetc(tFile);
+			//Pour chaque bit de l'octet
 			for(i = 0; i<8; i++)
 			{
+			    // txtBuffer >> i permet de decaler vers la droite de i les bits
+				// exemple 11110000 >> 1 = 01111000
+				// le & 1 permet de recuperer le dernier bit du txtBuffer pour le merge avec le wavBuffer grâce au |
+				// Attention ! On lis de droite à gauche donc il faudra remettre dans le bon ordre à la récupération
+				lastBitChar = (txtBuffer >> i) & 1;
+
 				wavBuffer = fgetc(wFile);
+
+				// & avec OxFE permet de mettre de dernier bit à 0
 				wavBuffer = wavBuffer & 0xFE;
-				wavBuffer = wavBuffer | ((char)((txtBuffer >> i) & 1));
+
+				// merge le ieme bit du texte avec le wavBuffer grâce au |
+				wavBuffer = wavBuffer | lastBitChar;
 				fputc(wavBuffer,oFile);
 
 				wavFileSize--;
@@ -108,7 +119,9 @@
 				buffer[i] = fgetc(bFile);
 			}
 
+			// On lis à l'envers pour remettre les bits dans le bon ordre
 			for (i=7; i>=0; i--) {
+                    // & 1 permet de récupérer le bit de poid faible
 				c += (buffer[i] & 1);
 				if(i != 0)
 					c <<= 1;

@@ -7,7 +7,8 @@
 	int wavDecoderHandler(char *, char *);
 
 	int main(int argc,char *argv[]) {
-
+//wavEncoderHandler("ding.wav","song.txt","output.wav");
+//wavDecoderHandler("output.wav","output.txt");
 		try {
 			const char *f1 = argv[1];
 
