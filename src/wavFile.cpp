@@ -127,14 +127,27 @@
 					c <<= 1;
 			}
 
-			if(c == EOF) {
-				break;
+			if(getFileExt(txt) == "txt"){
+                if(c == EOF) {
+                    break;
+                } else {
+                    fputc(c,tFile);
+                }
 			} else {
-				fputc(c,tFile);
-			}
+                fputc(c,tFile);
+            }
 		}
 
 		fclose(bFile);
 		fclose(tFile);
 		return 0;
 	}
+
+	string WavFile::getFileExt(char *c) {
+	    std::string s(c);
+        size_t i = s.rfind('.', s.length());
+        if (i != string::npos) {
+            return(s.substr(i+1, s.length() - i));
+        }
+        return("");
+    }

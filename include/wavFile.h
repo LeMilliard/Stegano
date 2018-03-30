@@ -8,4 +8,5 @@ class WavFile{
 		int checkFiles(char *parentfile, char *childfile);
 		int encode(char *parentfile, char *childfile, char *outputfile);
 		int decode(char *parentfile, char *txtfile);
+		string getFileExt(char *txtfile);
 };
