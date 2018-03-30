@@ -1,0 +1,36 @@
+#include "pistache/endpoint.h"
+
+using namespace Pistache;
+
+class SteganoHandler : public Http::Handler {
+public:
+
+    HTTP_PROTOTYPE(SteganoHandler)
+
+    void onRequest(const Http::Request& request, Http::ResponseWriter response) {
+        if (req.resource() == "/encode") {
+            if (req.method() == Http::Method::Post) {
+                // Je fais ce que je dois faire et je renvoie
+                response.send(Http::Code::Ok, req.body(), MIME(Text, Plain));
+            }
+        } else if (req.resource() == "/decode") {
+            if (req.method() == Http::Method::Post) {
+                // Je fais ce que je dois faire et je renvoie
+                response.send(Http::Code::Ok, req.body(), MIME(Text, Plain));
+            }
+        }
+    }
+};
+
+int main() {
+    Pistache::Address addr(Pistache::Ipv4::any(), Pistache::Port(9080));
+    auto opts = Pistache::Http::Endpoint::options()
+        .threads(1);
+
+    Http::Endpoint server(addr);
+    server.init(opts);
+    server.setHandler(Http::make_handler<SteganoHandler>());
+    server.serve();
+
+    server.shutdown();
+}
