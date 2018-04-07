@@ -62,7 +62,6 @@ int WavFile::encode (char *parent, char *child, char *output)
 
     while( ! feof(tFile) )
     {
-        cpt++;
         txtBuffer = fgetc(tFile);
         //Pour chaque bit de l'octet
         for(i = 0; i<8; i++)
