@@ -7,44 +7,47 @@
 	int wavDecoderHandler(char *, char *);
 
 	int main(int argc,char *argv[]) {
-//wavEncoderHandler("ding.wav","song.txt","output.wav");
-//wavDecoderHandler("output.wav","output.txt");
-		try {
-			const char *f1 = argv[1];
-
-			switch(argc)
-			{
-				case 1:
-				case 2:
-                case 3:
-					exit(0);
-					break;
-				case 4:
-					if ( strcmp(f1, "-d") == 0 ) {
-						wavDecoderHandler(argv[2],argv[3]);
-					} else {
-						cout<<"example: "<<endl;
-						cout<<"notre.exe -d embarqueLeCode.wav output.txt"<<endl;
-						exit(0);
-					}
-					break;
-				case 5:
-					if ( strcmp(f1, "-e") == 0 ) {
-						wavEncoderHandler(argv[2],argv[3],argv[4]);
-					} else {
-						cout<<"example: "<<endl;
-						cout<<"notre.exe -e wavSansLeCode.wav texteAEncoder.txt embarqueLeCode.wav"<<endl;
-						exit(0);
-					}
-					break;
-			}
-		}
-		catch(char *err)
-		{
-			cout<<"Error : "<<err<<endl;
-			exit(1);
-		}
-
+wavEncoderHandler("ding.wav","download.jpg","testImage.wav");
+wavDecoderHandler("testImage.wav","decodeImage.jpg");
+//
+wavEncoderHandler("ding.wav","song.txt","testTexte.wav");
+wavDecoderHandler("testTexte.wav","decodeTexte.txt");
+//		try {
+//			const char *f1 = argv[1];
+//
+//			switch(argc)
+//			{
+//				case 1:
+//				case 2:
+//                case 3:
+//					exit(0);
+//					break;
+//				case 4:
+//					if ( strcmp(f1, "-d") == 0 ) {
+//						wavDecoderHandler(argv[2],argv[3]);
+//					} else {
+//						cout<<"example: "<<endl;
+//						cout<<"notre.exe -d embarqueLeCode.wav output.txt"<<endl;
+//						exit(0);
+//					}
+//					break;
+//				case 5:
+//					if ( strcmp(f1, "-e") == 0 ) {
+//						wavEncoderHandler(argv[2],argv[3],argv[4]);
+//					} else {
+//						cout<<"example: "<<endl;
+//						cout<<"notre.exe -e wavSansLeCode.wav texteAEncoder.txt embarqueLeCode.wav"<<endl;
+//						exit(0);
+//					}
+//					break;
+//			}
+//		}
+//		catch(char *err)
+//		{
+//			cout<<"Error : "<<err<<endl;
+//			exit(1);
+//		}
+//
 		return 0;
 	}
 

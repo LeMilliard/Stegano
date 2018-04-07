@@ -1,7 +1,7 @@
 class WavFile{
     private:
 	public:
-		unsigned long wavFileSize;
+//		unsigned long wavFileSize;
 
 		WavFile(char *filename);
 		int isFileExist(char *filename);
